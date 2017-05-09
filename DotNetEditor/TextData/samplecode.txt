@@ -1,0 +1,21 @@
+Console.WriteLine("Multiplication")
+Console.WriteLine()
+
+Debug.Print(Mid("debugging", 1, 5))
+
+For i As Integer = 1 To 9
+  For j As Integer = 1 To 9
+    Console.BackgroundColor = i
+    Console.ForegroundColor = j
+    Console.Write( _
+      (i*j).ToString("00 "))
+  Next
+  Console.WriteLine()
+Next
+
+Console.ResetColor()
+
+Console.WriteLine()
+Console.Write("Enter some text: ")
+Dim s As String = Console.ReadLine()
+Console.WriteLine(s)
