@@ -1,12 +1,16 @@
 # Dot Net Editor
 
+[![Screenshot](https://preview.ibb.co/gOObAk/Dot_Net_Editor_2017_05_09_18_01_37.png)](https://ibb.co/cmbwAk)
+
 Dot Net Editor is an VB/C# text editor with the ability to run code and code snippets. It can run a complete code file, or a snippet containing only the inside of a class or the inside of `Main()`.
 
-The program does not use an interactive console when Console.ReadLine is executed. Instead the text in ìInput Dataêî is used as the input.
+The program does not use an interactive console when Console.ReadLine is executed. Instead the text in ‚ÄúInput Data‚Äù is used as the input.
+The input is relayed into the Console output to simulate an interactive console.
+This can help users (likely students and educators) to verify the correctness of the program.
 
 ## License
 
-The program is licensed under GPLv3, but with exception to graphical assets (e.g. icons), for which are mostly distributed under some CC license. See LICENSE for details.
+The program is licensed under GPLv3, but with exception that allow linking graphical assets (e.g. icons) to the binaries under some conditions. See LICENSE for details.
 
 ## Credits
 

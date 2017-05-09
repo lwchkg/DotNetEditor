@@ -17,7 +17,29 @@ namespace DotNetEditor.CodeRunner
         {
         }
 
-        protected override SyntaxTree GetSyntaxTree()
+        protected override Compilation GetCompilation()
+        {
+            var parseOptions = new CSharpParseOptions(
+                    preprocessorSymbols: new[] { "DEBUG", "TRACE" });
+
+            SyntaxTree tree = GetSyntaxTree(parseOptions);
+
+            SortedSet<string> uniqueImports = new SortedSet<string>(AssemblyImports);
+            uniqueImports.Add("mscorlib.dll");
+            uniqueImports.Add("Microsoft.CSharp.dll");
+
+            string dllPath = GetReferenceAssembliesPath();
+            IEnumerable<MetadataReference> references =
+                uniqueImports.Select(import => MetadataReference.CreateFromFile(
+                    System.IO.Path.Combine(dllPath, import)));
+
+            var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication);
+
+            return CSharpCompilation.Create(
+                "DotNetEditor_Script", new[] { tree }, references, options);
+        }
+
+        private SyntaxTree GetSyntaxTree(CSharpParseOptions options)
         {
             string[] templates =
             {
@@ -37,7 +59,7 @@ namespace DotNetEditor.CodeRunner
             foreach (string template in templates)
             {
                 string parsedCode = String.Format(template, Code, GetUsings(NSImports));
-                SyntaxTree newTree = CSharpSyntaxTree.ParseText(parsedCode);
+                SyntaxTree newTree = CSharpSyntaxTree.ParseText(parsedCode, options);
                 int newErrorCount = newTree.GetDiagnostics().Count();
                 if (newErrorCount < errorCount)
                 {
@@ -51,25 +73,6 @@ namespace DotNetEditor.CodeRunner
             }
 
             return tree;
-        }
-
-        protected override Compilation GetCompilation()
-        {
-            SyntaxTree tree = GetSyntaxTree();
-
-            SortedSet<string> uniqueImports = new SortedSet<string>(AssemblyImports);
-            uniqueImports.Add("mscorlib.dll");
-            uniqueImports.Add("Microsoft.CSharp.dll");
-
-            string dllPath = GetReferenceAssembliesPath();
-            IEnumerable<MetadataReference> references =
-                uniqueImports.Select(import => MetadataReference.CreateFromFile(
-                    System.IO.Path.Combine(dllPath, import)));
-
-            var options = new CSharpCompilationOptions(OutputKind.ConsoleApplication);
-
-            return CSharpCompilation.Create(
-                "DotNetEditor_Script", new[] { tree }, references, options);
         }
 
         private string GetUsings(string[] usings)

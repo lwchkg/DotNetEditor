@@ -18,31 +18,15 @@ namespace DotNetEditor.CodeRunner
         {
         }
 
-        protected override SyntaxTree GetSyntaxTree()
-        {
-            SyntaxTree tree = VisualBasicSyntaxTree.ParseText(Code);
-
-            if (IsInsideOfSubMain(tree))
-            {
-                string parsedCode = String.Format(
-                    "Module Module1\nSub Main\n{0}\nEnd Sub\nEnd Module", Code);
-                return VisualBasicSyntaxTree.ParseText(parsedCode);
-            }
-            else if (IsInsideOfClass(tree))
-            {
-                string parsedCode = String.Format(
-                    "Module Module1\n{0}\nEnd Module", Code);
-                return VisualBasicSyntaxTree.ParseText(parsedCode);
-            }
-            else
-            {
-                return tree;
-            }
-        }
-
         protected override Compilation GetCompilation()
         {
-            SyntaxTree tree = GetSyntaxTree();
+            var preprocessorSymbols =
+                new Dictionary<string, object> { { "DEBUG", true}, { "TRACE", true} };
+
+            var parseOptions = new VisualBasicParseOptions(
+                    preprocessorSymbols: preprocessorSymbols);
+
+            SyntaxTree tree = GetSyntaxTree(parseOptions);
 
             SortedSet<string> uniqueImports = new SortedSet<string>(AssemblyImports);
             uniqueImports.Add("mscorlib.dll");
@@ -53,15 +37,35 @@ namespace DotNetEditor.CodeRunner
                 uniqueImports.Select(import => MetadataReference.CreateFromFile(
                     System.IO.Path.Combine(dllPath, import)));
 
-            var options = new VisualBasicCompilationOptions(
+            var compilationOptions = new VisualBasicCompilationOptions(
                 OutputKind.ConsoleApplication,
                 globalImports: GlobalImport.Parse(NSImports),
-                optionInfer: true,
-                optionExplicit: true,
-                optionCompareText: false);
+                parseOptions: parseOptions);
 
             return VisualBasicCompilation.Create(
-                "DotNetEditor_Script", new[] { tree }, references, options);
+                "DotNetEditor_Script", new[] { tree }, references, compilationOptions);
+        }
+
+        private SyntaxTree GetSyntaxTree(VisualBasicParseOptions options)
+        {
+            SyntaxTree tree = VisualBasicSyntaxTree.ParseText(Code, options);
+
+            if (IsInsideOfSubMain(tree))
+            {
+                string parsedCode = String.Format(
+                    "Module Module1\nSub Main\n{0}\nEnd Sub\nEnd Module", Code);
+                return VisualBasicSyntaxTree.ParseText(parsedCode, options);
+            }
+            else if (IsInsideOfClass(tree))
+            {
+                string parsedCode = String.Format(
+                    "Module Module1\n{0}\nEnd Module", Code);
+                return VisualBasicSyntaxTree.ParseText(parsedCode, options);
+            }
+            else
+            {
+                return tree;
+            }
         }
 
         private bool IsInsideOfSubMain(SyntaxTree tree)

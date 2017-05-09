@@ -118,8 +118,6 @@ namespace DotNetEditor.CodeRunner
             return @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1";
         }
 
-        protected abstract SyntaxTree GetSyntaxTree();
-
         protected abstract Compilation GetCompilation();
 
         private string DiagToString(Diagnostic diag)
