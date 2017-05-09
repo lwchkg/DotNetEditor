@@ -1,4 +1,8 @@
-﻿using ICSharpCode.AvalonEdit.Document;
+﻿// Copyright 2017 Leung Wing-chung. All rights reserved.
+// Use of this source code is governed by a GPLv3 license that can be found in
+// the LICENSE file.
+
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using System;
 using System.Linq;

@@ -37,7 +37,7 @@ namespace DotNetEditor
 
         private void UpdateTitle()
         {
-            Title = String.Format("{0}{1} - {2}", _currentBuffer.IsDirty ? "*" : "", 
+            Title = String.Format("{0}{1} - {2}", _currentBuffer.IsDirty ? "*" : "",
                 System.IO.Path.GetFileName(_currentBuffer.Filename ?? untitledFile), App.AppName);
         }
 
@@ -78,7 +78,7 @@ namespace DotNetEditor
         {
             return "All Supported Files|*.vb; *.cs|VB Program|*.vb|C# Program|*.cs|All Files|*.*";
         }
-        
+
         #region Commands
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -178,9 +178,7 @@ namespace DotNetEditor
             runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            //runner.ColoredOutput = true;
-            //bool success = runner.Run();
-            bool success = runner.RunByRoslyn();
+            bool success = runner.Run();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
         }
 

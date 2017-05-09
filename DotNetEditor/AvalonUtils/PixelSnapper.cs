@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿// Copyright 2017 Leung Wing-chung. All rights reserved.
+// Use of this source code is governed by a GPLv3 license that can be found in
+// the LICENSE file.
+
+using System.Windows;
 using System.Windows.Media;
 
 using PixelSnapHelpers = ICSharpCode.AvalonEdit.Utils.PixelSnapHelpers;

@@ -21,7 +21,9 @@ namespace DotNetEditor
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelLicense.Text = "Released under GPLv3 with exceptions.";
             this.textBoxDescription.Text =
-                Properties.Resources.aboutbox.Replace("{app}", AssemblyProduct);
+                Properties.Resources.aboutbox
+                    .Replace("\n", Environment.NewLine)
+                    .Replace("{app}", AssemblyProduct);
         }
 
         #region Assembly Attribute Accessors

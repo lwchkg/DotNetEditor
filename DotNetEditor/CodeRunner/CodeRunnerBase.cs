@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Copyright 2017 Leung Wing-chung. All rights reserved.
+// Use of this source code is governed by a GPLv3 license that can be found in
+// the LICENSE file.
+
+using Microsoft.CodeAnalysis;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -125,14 +129,14 @@ namespace DotNetEditor.CodeRunner
                 diag.GetMessage());
         }
 
-        public bool RunByRoslyn()
+        public bool Run()
         {
             _outputArea.Clear();
             Compilation compilation = GetCompilation();
 
             var stream = new System.IO.MemoryStream();
             var emitResult = compilation.Emit(stream);
-            
+
             if (!emitResult.Success)
             {
                 addResult(Environment.NewLine +

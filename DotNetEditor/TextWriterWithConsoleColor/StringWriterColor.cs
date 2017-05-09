@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright 2017 Leung Wing-chung. All rights reserved.
+// Use of this source code is governed by a GPLv3 license that can be found in
+// the LICENSE file.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +38,7 @@ namespace DotNetEditor.TextWriterWithConsoleColor
                 colorData.Add(new ColorSegment(start, color));
                 currentColor = color;
             }
-            
+
             _buffer.Append(value);
         }
 
@@ -59,13 +63,13 @@ namespace DotNetEditor.TextWriterWithConsoleColor
                 callback(_buffer.ToString(
                              colorData[i].Start,
                              colorData[i+1].Start - colorData[i].Start),
-                         colorData[i].Color);
+                             colorData[i].Color);
             }
 
             callback(_buffer.ToString(
                          colorData.Last().Start,
                          _buffer.Length - colorData.Last().Start),
-                     colorData.Last().Color);
+                          colorData.Last().Color);
         }
 
         public override string ToString()
