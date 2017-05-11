@@ -115,7 +115,29 @@ namespace DotNetEditor.CodeRunner
         // Return: whether a the code runs successfully without error.
         protected string GetReferenceAssembliesPath()
         {
-            return @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1";
+            string basepath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86,
+                                          Environment.SpecialFolderOption.DoNotVerify),
+                "Reference Assemblies",
+                "Microsoft",
+                "Framework",
+                ".NETFramework");
+
+            // Return the newest version with version number 4.6.x.
+            string[] directories = System.IO.Directory.GetDirectories(basepath, "v4.6.*");
+            if (directories.Any()) {
+                return directories.Max();
+            }
+
+            // If not found, return the newest version with version number 4.x.
+            directories = System.IO.Directory.GetDirectories(basepath, "v4.*");
+            if (directories.Any())
+            {
+                return directories.Max();
+            }
+
+            // If still not found, throw an exception.
+            throw new System.IO.DirectoryNotFoundException("Cannot locate a v4.x .NET framework.");
         }
 
         protected abstract Compilation GetCompilation();
