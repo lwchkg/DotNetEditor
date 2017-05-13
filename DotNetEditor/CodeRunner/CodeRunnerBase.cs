@@ -112,10 +112,38 @@ namespace DotNetEditor.CodeRunner
             buffer.ForEachPart(addConsoleColoredText);
         }
 
-        // Return: whether a the code runs successfully without error.
+        // Get the path to the optimally selected version of the .NET reference assemblies. If no
+        // matches are found, throw DirectoryNotFoundException.
         protected string GetReferenceAssembliesPath()
         {
-            return @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1";
+            string basepath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86,
+                                          Environment.SpecialFolderOption.DoNotVerify),
+                "Reference Assemblies",
+                "Microsoft",
+                "Framework",
+                ".NETFramework");
+
+            // List of .NET reference assembly directories, with glob wildcards characters.
+            string[] globPatternList = { "v4.6.*", "v4.*" };
+
+            // Try to match the first pattern. If no match, try the second pattern, etc.
+            foreach (string pattern in globPatternList)
+            {
+                string[] directories = System.IO.Directory.GetDirectories(basepath, pattern);
+                if (directories.Any())
+                {
+                    // If multiple versions are found, return the path to the latest version.
+                    return directories.Max();
+                }
+            }
+
+            // If no .NET reference assembly is found, throw an exception.
+            string dotNetDeveloperPackURL =
+                "https://www.microsoft.com/en-us/download/details.aspx?id=49978";
+            throw new System.IO.DirectoryNotFoundException(
+                String.Format("No .NET 4.x reference assemblies is found. Please install .NET Framework 4.6.1 Developer Pack at {0}",
+                              dotNetDeveloperPackURL));
         }
 
         protected abstract Compilation GetCompilation();
@@ -130,7 +158,16 @@ namespace DotNetEditor.CodeRunner
         public bool Run()
         {
             _outputArea.Clear();
-            Compilation compilation = GetCompilation();
+            Compilation compilation;
+            try
+            {
+                compilation = GetCompilation();
+            }
+            catch (CodeRunnerException e)
+            {
+                addResult(Environment.NewLine + e.Message, "Unable to compile", errorFgColor);
+                return false;
+            }
 
             var stream = new System.IO.MemoryStream();
             var emitResult = compilation.Emit(stream);
@@ -227,8 +264,7 @@ namespace DotNetEditor.CodeRunner
 
             if (hasError)
             {
-                addResult(exStore.InnerException.Message,
-                    "Runtime error");//, errorColor)
+                addResult(exStore.InnerException.Message, "Runtime error", errorFgColor);
             }
 
             return !hasError;

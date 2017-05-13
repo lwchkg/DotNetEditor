@@ -32,10 +32,20 @@ namespace DotNetEditor.CodeRunner
             uniqueImports.Add("mscorlib.dll");
             uniqueImports.Add("Microsoft.VisualBasic.dll");
 
-            string dllPath = GetReferenceAssembliesPath();
-            IEnumerable<MetadataReference> references =
-                uniqueImports.Select(import => MetadataReference.CreateFromFile(
-                    System.IO.Path.Combine(dllPath, import)));
+            List<MetadataReference> references = new List<MetadataReference>();
+            try
+            {
+                string dllPath = GetReferenceAssembliesPath();
+                foreach (string import in uniqueImports)
+                {
+                    references.Add(MetadataReference.CreateFromFile(System.IO.Path.Combine(
+                                                                        dllPath, import)));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new CodeRunnerException(e.Message, e);
+            }
 
             var compilationOptions = new VisualBasicCompilationOptions(
                 OutputKind.ConsoleApplication,
