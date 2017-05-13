@@ -134,7 +134,7 @@ namespace DotNetEditor.CodeRunner
                 if (directories.Any())
                 {
                     // If multiple versions are found, return the path to the latest version.
-                    //return directories.Max();
+                    return directories.Max();
                 }
             }
 
