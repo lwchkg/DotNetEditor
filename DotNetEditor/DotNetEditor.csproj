@@ -199,11 +199,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AvalonUtils\AvalonRichTextBox.cs" />
+    <Compile Include="AvalonUtils\AvalonCodeRunnerOutput.cs" />
     <Compile Include="AvalonUtils\PixelSnapper.cs" />
     <Compile Include="CodeRunner\CodeRunnerBase.cs" />
     <Compile Include="CodeRunner\CodeRunnerException.cs" />
     <Compile Include="CodeRunner\CSCodeRunner.cs" />
+    <Compile Include="CodeRunner\ICodeRunnerOutput.cs" />
     <Compile Include="ConsoleColorScheme.cs" />
     <Compile Include="ConsoleUtil.cs" />
     <Compile Include="Converters.cs" />

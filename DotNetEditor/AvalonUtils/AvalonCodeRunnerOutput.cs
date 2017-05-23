@@ -11,10 +11,10 @@ using System.Windows.Media;
 
 namespace DotNetEditor
 {
-    /// <summary>
-    /// Interaction logic for AvalonRichTextBox.xaml
-    /// </summary>
-    public class AvalonRichTextBox : ICSharpCode.AvalonEdit.TextEditor
+    // This is the output area of a code runner, which is a customized AvalonEdit.TextEditor control
+    // with the ability to store formatting information with text.
+    public class AvalonCodeRunnerOutput :
+        ICSharpCode.AvalonEdit.TextEditor, CodeRunner.ICodeRunnerOutput
     {
         private class TextFormat : TextSegment
         {
@@ -136,14 +136,14 @@ namespace DotNetEditor
 
         private TextSegmentCollection<TextFormat> formatInfo;
 
-        public AvalonRichTextBox()
+        public AvalonCodeRunnerOutput()
         {
             formatInfo = new TextSegmentCollection<TextFormat>(Document);
             TextArea.TextView.LineTransformers.Add(new RTBColorizer(formatInfo));
             TextArea.TextView.BackgroundRenderers.Add(new RTBBackgroundRenderer(formatInfo));
         }
 
-        public void SetStyle(int startOffset, int endOffset,
+        private void SetStyle(int startOffset, int endOffset,
             Color foregroundColor, Color backgroundColor, bool? IsBold, bool? IsItalic)
         {
             TextFormat fmt = new TextFormat();
@@ -157,7 +157,7 @@ namespace DotNetEditor
             formatInfo.Add(fmt);
         }
 
-
+        #region ICodeRunnerOutput
         public void AppendTextWithStyle(string text, Color foregroundColor, Color backgroundColor,
             bool? isBold, bool? isItalic)
         {
@@ -165,5 +165,15 @@ namespace DotNetEditor
             AppendText(text);
             SetStyle(start, Text.Length, foregroundColor, backgroundColor, isBold, isItalic);
         }
+
+        // void AppendText(string text);  (already implemented by AvalonEdit.TextEditor)
+
+        // void Clear();  (already implemented by AvalonEdit.TextEditor)
+
+        public bool IsEmpty()
+        {
+            return !(Document?.TextLength > 0);
+        }
+        #endregion
     }
 }
