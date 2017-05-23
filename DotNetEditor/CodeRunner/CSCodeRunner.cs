@@ -12,7 +12,7 @@ namespace DotNetEditor.CodeRunner
 {
     class CSCodeRunner : CodeRunnerBase
     {
-        public CSCodeRunner(string code, string inputData, AvalonRichTextBox outputArea)
+        public CSCodeRunner(string code, string inputData, AvalonCodeRunnerOutput outputArea)
             : base(code, inputData, outputArea)
         {
         }

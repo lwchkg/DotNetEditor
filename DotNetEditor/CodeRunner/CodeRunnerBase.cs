@@ -38,7 +38,7 @@ namespace DotNetEditor.CodeRunner
         public bool DumpInput { get; set; } = true;
         public ConsoleColorScheme ColorScheme { get; set; } = ConsoleColorScheme.DefaultColorScheme;
 
-        private AvalonRichTextBox _outputArea;
+        private ICodeRunnerOutput _outputArea;
 
         // Default text colors
         readonly Color defaultTextBgColor = Brushes.Black.Color;
@@ -49,7 +49,7 @@ namespace DotNetEditor.CodeRunner
         // TODO: constants to be abstracted
         readonly Color errorFgColor = Brushes.Red.Color;
 
-        protected CodeRunnerBase(string code, string inputData, AvalonRichTextBox outputArea)
+        protected CodeRunnerBase(string code, string inputData, ICodeRunnerOutput outputArea)
         {
             Code = code;
             InputData = inputData;
@@ -58,58 +58,57 @@ namespace DotNetEditor.CodeRunner
             _outputArea = outputArea;
         }
 
-        public void SetOutputArea(AvalonRichTextBox outputArea)
+        public void SetOutputArea(ICodeRunnerOutput outputArea)
         {
             _outputArea = outputArea;
         }
 
-        void addStyledText(string s, Color foregroundColor, Color backgroundColor,
-                           bool? isBold, bool? isItalic)
+        void AppendStyledText(string s, Color foregroundColor, Color backgroundColor,
+                              bool? isBold, bool? isItalic)
         {
-            int pos = _outputArea.Text.Length;
             _outputArea.AppendTextWithStyle(s, foregroundColor, backgroundColor, isBold, isItalic);
         }
 
-        void addConsoleColoredText(string s, TextWriterWithConsoleColor.ColorInfo color)
+        void AppendConsoleColoredText(string s, TextWriterWithConsoleColor.ColorInfo color)
         {
-            addStyledText(s, ColorScheme.ConvertColor(color.Foreground),
-                          ColorScheme.ConvertColor(color.Background), false, false);
+            AppendStyledText(s, ColorScheme.ConvertColor(color.Foreground),
+                             ColorScheme.ConvertColor(color.Background), false, false);
         }
 
-        void addResult(string mainText, string title,
-                       Color? textFgColor = null, Color? textBgColor = null,
-                       Color? titleFgColor = null, Color? titleBgColor = null)
+        void AppendResult(string mainText, string title,
+                          Color? textFgColor = null, Color? textBgColor = null,
+                          Color? titleFgColor = null, Color? titleBgColor = null)
         {
-            if (_outputArea.Text.Length > 0)
+            if (!_outputArea.IsEmpty())
             {
                 _outputArea.AppendText("\n\n");
             }
 
-            addStyledText(" --- " + title + " --- \n",
-                          titleFgColor ?? defaultTitleFgColor,
-                          titleBgColor ?? defaultTitleBgColor,
-                          true, null);
+            AppendStyledText(" --- " + title + " --- \n",
+                             titleFgColor ?? defaultTitleFgColor,
+                             titleBgColor ?? defaultTitleBgColor,
+                             true, null);
 
-            addStyledText(mainText,
-                          textFgColor ?? defaultTextFgColor,
-                          textBgColor ?? defaultTextBgColor,
-                          null, null);
+            AppendStyledText(mainText,
+                             textFgColor ?? defaultTextFgColor,
+                             textBgColor ?? defaultTextBgColor,
+                             null, null);
         }
 
         void dumpConsoleBuffer(TextWriterWithConsoleColor.TextWriterWithConsoleColor buffer,
                                string title, Color? titleFgColor = null, Color? titleBgColor = null)
         {
-            if (_outputArea.Text.Length > 0)
+            if (!_outputArea.IsEmpty())
             {
                 _outputArea.AppendText("\n\n");
             }
 
-            addStyledText(" --- " + title + " --- \n",
-                          titleFgColor ?? defaultTitleFgColor,
-                          titleBgColor ?? defaultTitleBgColor,
-                          true, null);
+            AppendStyledText(" --- " + title + " --- \n",
+                             titleFgColor ?? defaultTitleFgColor,
+                             titleBgColor ?? defaultTitleBgColor,
+                             true, null);
 
-            buffer.ForEachPart(addConsoleColoredText);
+            buffer.ForEachPart(AppendConsoleColoredText);
         }
 
         // Get the path to the optimally selected version of the .NET reference assemblies. If no
@@ -165,7 +164,7 @@ namespace DotNetEditor.CodeRunner
             }
             catch (CodeRunnerException e)
             {
-                addResult(Environment.NewLine + e.Message, "Unable to compile", errorFgColor);
+                AppendResult(Environment.NewLine + e.Message, "Unable to compile", errorFgColor);
                 return false;
             }
 
@@ -174,11 +173,13 @@ namespace DotNetEditor.CodeRunner
 
             if (!emitResult.Success)
             {
-                addResult(Environment.NewLine +
+                AppendResult(Environment.NewLine +
                     emitResult.Diagnostics
                         .Select(diag => DiagToString(diag))
-                        .Aggregate((current, next) => current + Environment.NewLine + Environment.NewLine + next),
-                    "Compile error", errorFgColor);
+                        .Aggregate((current, next) =>
+                            current + Environment.NewLine + Environment.NewLine + next),
+                    "Compile error",
+                    errorFgColor);
 
                 System.Diagnostics.Debug.WriteLine(
                     "Code being compiled with errors:\n" +
@@ -254,17 +255,17 @@ namespace DotNetEditor.CodeRunner
             var s = debugWriter.ToString();
             if (s != "")
             {
-                addResult(debugWriter.ToString(), "Debug/trace output");
+                AppendResult(debugWriter.ToString(), "Debug/trace output");
             }
 
             if (result != null)
             {
-                addResult(result.ToString(), "Return value");
+                AppendResult(result.ToString(), "Return value");
             }
 
             if (hasError)
             {
-                addResult(exStore.InnerException.Message, "Runtime error", errorFgColor);
+                AppendResult(exStore.InnerException.Message, "Runtime error", errorFgColor);
             }
 
             return !hasError;
