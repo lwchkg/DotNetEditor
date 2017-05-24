@@ -55,11 +55,11 @@ requirements of the license of the Program.
 The following files are the property of Icons8 (https://icons8.com),
 which are distributed under CC BY-ND 3.0:
 
-    Images/about-30.png
-    Images/cs-30.png
-    Images/down_left-30.png
-    Images/open_document-30.png
-    Images/play-30.png
-    Images/save-30.png
-    Images/save_as-30.png
-    Images/vb-30.png
+    DotNetEditor/Images/about-30.png
+    DotNetEditor/Images/cs-30.png
+    DotNetEditor/Images/down_left-30.png
+    DotNetEditor/Images/open_folder-30.png
+    DotNetEditor/Images/play-30.png
+    DotNetEditor/Images/save-30.png
+    DotNetEditor/Images/save_as-30.png
+    DotNetEditor/Images/vb-30.png

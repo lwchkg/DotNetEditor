@@ -76,7 +76,7 @@
             </ToolBar.Resources>
             <Button Command="Open"
                     ToolTip="{Binding Command, Converter={StaticResource Command}, RelativeSource={RelativeSource Self}}">
-                <Image Source="Images/open_document-30.png" />
+                <Image Source="Images/open_folder-30.png" />
             </Button>
             <Button Command="Save"
                     ToolTip="{Binding Command, Converter={StaticResource Command}, RelativeSource={RelativeSource Self}}">
