@@ -6,17 +6,20 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor
 {
     // This is the output area of a code runner, which is a customized AvalonEdit.TextEditor control
     // with the ability to store formatting information with text.
-    public class AvalonCodeRunnerOutput :
+    class AvalonCodeRunnerOutput :
         ICSharpCode.AvalonEdit.TextEditor, CodeRunner.ICodeRunnerOutput
     {
-        private class TextFormat : TextSegment
+        internal class TextFormat : TextSegment
         {
             public Color ForegroundColor = Brushes.LightGray.Color;
             public Color BackgroundColor = Brushes.Black.Color;

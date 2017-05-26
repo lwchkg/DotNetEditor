@@ -7,12 +7,15 @@ using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor.CodeRunner
 {
     class CSCodeRunner : CodeRunnerBase
     {
-        public CSCodeRunner(string code, string inputData, AvalonCodeRunnerOutput outputArea)
+        public CSCodeRunner(string code, string inputData, ICodeRunnerOutput outputArea)
             : base(code, inputData, outputArea)
         {
         }
@@ -53,10 +56,10 @@ namespace DotNetEditor.CodeRunner
         {
             string[] templates =
             {
-                // the raw program
-                "{0}",
                 // the program put inside a class
                 "{1} class Program {{ {0} }}",
+                // the raw program
+                "{0}",
                 // the program put inside Main function
                 "{1} class Program {{ static void Main(string[] args) {{ {0} }} }}"
             };

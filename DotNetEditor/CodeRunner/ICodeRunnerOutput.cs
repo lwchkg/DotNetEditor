@@ -2,7 +2,10 @@
 // Use of this source code is governed by a GPLv3 license that can be found in
 // the LICENSE file.
 
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor.CodeRunner
 {
