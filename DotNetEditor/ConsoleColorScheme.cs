@@ -3,7 +3,10 @@
 // the LICENSE file.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor
 {

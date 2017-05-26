@@ -9,8 +9,11 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor.CodeRunner
 {
@@ -183,7 +186,7 @@ namespace DotNetEditor.CodeRunner
 
                 System.Diagnostics.Debug.WriteLine(
                     "Code being compiled with errors:\n" +
-                    emitResult.Diagnostics[0].Location.SourceTree.GetText().ToString());
+                    emitResult.Diagnostics[0].Location.SourceTree?.GetText() ?? "unknown");
 
                 return false;
             }

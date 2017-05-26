@@ -8,12 +8,15 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleToAttribute("DotNetEditor.Tests")]
 
 namespace DotNetEditor.CodeRunner
 {
     class VBCodeRunner : CodeRunnerBase
     {
-        public VBCodeRunner(string code, string inputData, AvalonCodeRunnerOutput outputArea)
+        public VBCodeRunner(string code, string inputData, ICodeRunnerOutput outputArea)
             : base(code, inputData, outputArea)
         {
         }
