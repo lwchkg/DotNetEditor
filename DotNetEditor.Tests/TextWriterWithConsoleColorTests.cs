@@ -36,6 +36,8 @@ namespace DotNetEditor.Tests
                     throw new SkipTestException(noConsoleColor);
                 }
             }
+
+            Console.ResetColor();
         }
 
         [SkippableFact]
