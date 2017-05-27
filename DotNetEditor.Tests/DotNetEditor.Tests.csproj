@@ -78,6 +78,14 @@
     <Compile Include="CodeRunnerTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkippableTest\SkippableFactAttribute.cs" />
+    <Compile Include="SkippableTest\SkippableTheoryAttribute.cs" />
+    <Compile Include="SkippableTest\SkipTestException.cs" />
+    <Compile Include="SkippableTest\XunitExtensions\SkippableFactDiscoverer.cs" />
+    <Compile Include="SkippableTest\XunitExtensions\SkippableFactMessageBus.cs" />
+    <Compile Include="SkippableTest\XunitExtensions\SkippableFactTestCase.cs" />
+    <Compile Include="SkippableTest\XunitExtensions\SkippableTheoryDiscoverer.cs" />
+    <Compile Include="SkippableTest\XunitExtensions\SkippableTheoryTestCase.cs" />
     <Compile Include="TestCodeRunnerOutput.cs" />
     <Compile Include="TextWriterWithConsoleColorTests.cs" />
   </ItemGroup>
