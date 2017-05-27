@@ -3,6 +3,8 @@
 // the LICENSE file.
 
 using DotNetEditor.CodeRunner;
+using SkippableTest;
+using System;
 using System.Windows.Media;
 using Xunit;
 
@@ -15,10 +17,31 @@ namespace DotNetEditor.Tests
     {
         const string ConsoleOutputLine = Constants.ConsoleOutputLine;
 
-        [Fact]
+        private void SkipTestIfNoConsoleColor()
+        {
+            const string noConsoleColor = "Console color not available.";
+
+            ConsoleColor[] colorList = (ConsoleColor[]) Enum.GetValues(typeof(ConsoleColor));
+            foreach (var color in colorList)
+            {
+                Console.ForegroundColor = color;
+                if (Console.ForegroundColor != color)
+                {
+                    throw new SkipTestException(noConsoleColor);
+                }
+
+                Console.BackgroundColor = color;
+                if (Console.BackgroundColor != color)
+                {
+                    throw new SkipTestException(noConsoleColor);
+                }
+            }
+        }
+
+        [SkippableFact]
         public void TextWriterWithConsoleColor()
         {
-            ConsoleUtil.CreateHiddenConsoleWindowIfNotExists();
+            SkipTestIfNoConsoleColor();
 
             const string code = @"
 Console.ForegroundColor = ConsoleColor.Red;
