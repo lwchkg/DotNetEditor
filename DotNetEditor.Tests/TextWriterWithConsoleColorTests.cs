@@ -18,6 +18,8 @@ namespace DotNetEditor.Tests
         [Fact]
         public void TextWriterWithConsoleColor()
         {
+            ConsoleUtil.CreateHiddenConsoleWindowIfNotExists();
+
             const string code = @"
 Console.ForegroundColor = ConsoleColor.Red;
 Console.Write(12);
