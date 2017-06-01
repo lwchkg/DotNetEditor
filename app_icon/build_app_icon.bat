@@ -6,7 +6,7 @@ setlocal enableDelayedExpansion
 set icolist=
 set inkscape_path=%ProgramFiles%\Inkscape\
 for %%k in (*.svg) do (
-  "%inkscape_path%inkscape" -f "%%k" -e "%%~nk.png"
+  "%inkscape_path%inkscape" -C -f "%%k" -e "%%~nk.png"
   set icolist=!icolist! "%%~nk.png"
 )
 
