@@ -10,13 +10,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16.000001"
+   width="40"
+   height="40"
+   viewBox="0 0 40 40.000002"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="DotNetEditor-16.svg"
+   sodipodi:docname="DotNetEditor-40.svg"
    inkscape:export-filename="C:\Users\lwchkg\Desktop\DotNetEditor-icon.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -55,7 +55,7 @@
        y1="1089.5195"
        x2="23"
        y2="1112.5195"
-       gradientTransform="matrix(0.31578947,0,0,0.34782568,0.4210528,731.55655)" />
+       gradientTransform="matrix(0.78947366,0,0,0.86956418,1.0526317,145.11212)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4549"
@@ -65,7 +65,7 @@
        x2="25"
        y2="1114.5195"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.33333333,0,0,0.32258063,-6.1581421e-8,759.997)" />
+       gradientTransform="matrix(0.80952379,0,0,0.77419352,0.57142862,251.66543)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -74,9 +74,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="19.859375"
-     inkscape:cx="1.0572616"
-     inkscape:cy="12.656412"
+     inkscape:zoom="13.308931"
+     inkscape:cx="-9.6513443"
+     inkscape:cy="1.4610469"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -111,103 +111,123 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-1106.5195)">
+     transform="translate(0,-1082.5195)">
     <rect
        style="fill:url(#linearGradient6037);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect4497"
-       width="14"
-       height="10"
-       x="1"
-       y="1109.5195"
-       rx="1"
-       ry="1" />
+       width="34"
+       height="24"
+       x="3"
+       y="1090.5195"
+       rx="2"
+       ry="2" />
     <rect
        style="fill:url(#linearGradient4553);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect4499"
-       width="12"
-       height="7.9999995"
-       x="2"
-       y="1110.5195" />
+       width="30"
+       height="20"
+       x="5"
+       y="1092.5195" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;line-height:0.75;font-family:Consolas;-inkscape-font-specification:Consolas;letter-spacing:0px;word-spacing:0px;fill:#00c000;fill-opacity:1;stroke:none"
-       x="2.9628246"
-       y="1114.4891"
+       x="7.487"
+       y="1102.5159"
        id="text4503"><tspan
          sodipodi:role="line"
          id="tspan4501"
-         x="2.9628246"
-         y="1114.4891"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:4px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro Heavy';fill:#00e000;fill-opacity:1"
-         dx="0 -0.30000001">VB</tspan><tspan
+         x="7.487"
+         y="1102.5159"
+         style="font-weight:bold;font-size:9.39999962px;line-height:0;fill:#00c000;fill-opacity:1">VB</tspan><tspan
          sodipodi:role="line"
-         x="2.9628246"
-         y="1122.4891"
+         x="7.487"
+         y="1110.5159"
          id="tspan4507"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:4px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro Heavy';fill:#00e000;fill-opacity:1"
-         dy="-5"
-         dx="0 -0.28999999">C#</tspan><tspan
+         style="font-weight:bold;font-size:9.39999962px;line-height:0;fill:#00c000;fill-opacity:1">C#</tspan><tspan
          sodipodi:role="line"
-         x="2.9628246"
-         y="1130.4891"
+         x="7.487"
+         y="1118.5159"
          id="tspan4505"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:4px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro Heavy';fill:#00e000;fill-opacity:1" /></text>
-    <circle
-       style="fill:#00c000;fill-opacity:1;stroke-width:0.60000002"
-       id="path3698"
-       cx="13"
-       cy="1118.5195"
-       r="3" />
-    <path
-       sodipodi:type="star"
-       style="fill:#ffffff;stroke-width:0.33333334"
-       id="path3696"
-       sodipodi:sides="3"
-       sodipodi:cx="13"
-       sodipodi:cy="1118.5195"
-       sodipodi:r1="2"
-       sodipodi:r2="1"
-       sodipodi:arg1="0"
-       sodipodi:arg2="1.0471976"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 15,1118.5195 -1.5,0.8661 -1.5,0.866 0,-1.7321 0,-1.732 1.5,0.866 z"
-       inkscape:transform-center-x="-0.49999957"
-       inkscape:transform-center-y="-9.6113049e-006" />
+         style="font-weight:bold;font-size:9.39999962px;line-height:0;fill:#00c000;fill-opacity:1" /></text>
+    <g
+       id="g3702"
+       transform="translate(0.99999881,11.999969)">
+      <circle
+         r="5"
+         cy="1101.5195"
+         cx="33"
+         id="path3698"
+         style="fill:#00c000;fill-opacity:1" />
+      <path
+         inkscape:transform-center-y="4.6356015e-005"
+         inkscape:transform-center-x="-0.83333461"
+         d="m 36.000001,1101.5195 -2.5,1.4434 -2.5,1.4434 0,-2.8868 0,-2.8867 2.5,1.4434 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="1.0471976"
+         sodipodi:arg1="0"
+         sodipodi:r2="1.6666667"
+         sodipodi:r1="3.3333333"
+         sodipodi:cy="1101.5195"
+         sodipodi:cx="32.666668"
+         sodipodi:sides="3"
+         id="path3696"
+         style="fill:#ffffff;stroke-width:0.55555558"
+         sodipodi:type="star" />
+    </g>
     <rect
-       y="1114.5195"
-       x="8"
+       y="1100.5195"
+       x="20"
        height="1"
-       width="3"
+       width="12"
        id="rect6050"
-       style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.40824831" />
+       style="fill:#777777;fill-opacity:1;stroke-width:0.81649661" />
+    <rect
+       y="1103.5195"
+       x="20"
+       height="1"
+       width="12"
+       id="rect6057"
+       style="fill:#777777;fill-opacity:1;stroke-width:0.81649661" />
+    <rect
+       style="fill:#777777;fill-opacity:1;stroke-width:0.81649661"
+       id="rect6059"
+       width="12"
+       height="1"
+       x="20"
+       y="1106.5195" />
+    <rect
+       style="fill:#777777;fill-opacity:1;stroke-width:0.6236096"
+       id="rect6063"
+       width="7"
+       height="1"
+       x="20"
+       y="1109.5195" />
+    <rect
+       y="1151.5195"
+       x="19"
+       height="1"
+       width="13"
+       id="rect6065"
+       style="fill:#777777;fill-opacity:1;stroke-width:0.84983665" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;line-height:0.75;font-family:Consolas;-inkscape-font-specification:Consolas;letter-spacing:0px;word-spacing:0px;fill:#777777;fill-opacity:1;stroke:none"
-       x="7.5848804"
-       y="1113.4199"
+       x="18.962143"
+       y="1098.931"
        id="text4503-6"><tspan
          sodipodi:role="line"
-         x="7.5848804"
-         y="1113.4199"
+         x="18.962143"
+         y="1098.931"
          id="tspan4507-3"
-         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:4px;line-height:1.00999999;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro Heavy';fill:#ffffff;fill-opacity:1"
-         dy="0.41 -0.41 0"
-         dx="0 -0.68000001 -0.41999999">&gt;<tspan
-   style="fill:#b3b3b3;fill-opacity:1"
-   id="tspan4508">..</tspan></tspan><tspan
+         style="font-weight:bold;font-size:8px;line-height:1.00999999;fill:#777777;fill-opacity:1"
+         dy="0 -0.19 0"
+         dx="0 -0.050000001 -0.44">&gt;..</tspan><tspan
          sodipodi:role="line"
-         x="7.5848804"
-         y="1121.4199"
+         x="18.962143"
+         y="1107.6182"
          id="tspan4505-1"
-         style="font-weight:bold;font-size:4px;line-height:1.00999999;fill:#777777;fill-opacity:1" /></text>
-    <rect
-       y="1116.5195"
-       x="8"
-       height="1"
-       width="2"
-       id="rect6050-6"
-       style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.33333334" />
+         style="font-weight:bold;font-size:9.33333302px;line-height:1.00999999;fill:#777777;fill-opacity:1" /></text>
   </g>
 </svg>
