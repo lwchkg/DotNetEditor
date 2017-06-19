@@ -13,6 +13,11 @@ namespace DotNetEditor
     /// </summary>
     public partial class App : Application
     {
-        public const string AppName = ".NET Snippet Editor";
+        public const string AppName = "Doe Net Editor";
+
+        private void OnStartup(object sender, StartupEventArgs e)
+        {
+            Bugsnag.Clients.WPFClient.Start();
+        }
     }
 }
