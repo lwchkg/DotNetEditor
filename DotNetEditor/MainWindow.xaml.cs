@@ -16,6 +16,10 @@ namespace DotNetEditor
 
         public MainWindow()
         {
+#if DEBUG
+            Bugsnag.Clients.WPFClient.Notify(new ArgumentException("Bugsnag crash report testing"));
+#endif
+
             InitializeComponent();
             _currentBuffer = new TextBuffer.TextBuffer(null, TextEditor.Document,
                                                        TextBuffer.FileMode.VB);
@@ -79,7 +83,7 @@ namespace DotNetEditor
             return "All Supported Files|*.vb; *.cs|VB Program|*.vb|C# Program|*.cs|All Files|*.*";
         }
 
-        #region Commands
+#region Commands
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = TextEditor == null ||
@@ -191,7 +195,7 @@ namespace DotNetEditor
         {
             new AboutBox().ShowDialog();
         }
-        #endregion
+#endregion
 
         private void buttonCodeTypeVB_Checked(object sender, RoutedEventArgs e)
         {
