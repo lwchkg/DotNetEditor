@@ -14,10 +14,12 @@ namespace DotNetEditor
     public partial class App : Application
     {
         public const string AppName = "Dot Net Editor";
+        public static Bugsnag.Client client;
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            Bugsnag.Clients.WPFClient.Start();
+            if (client == null)
+                client = new Bugsnag.Client(Bugsnag.ConfigurationSection.Configuration.Settings);
         }
     }
 }

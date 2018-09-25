@@ -17,7 +17,7 @@ namespace DotNetEditor
         public MainWindow()
         {
 #if DEBUG
-            Bugsnag.Clients.WPFClient.Notify(new ArgumentException("Bugsnag crash report testing"));
+            App.client.Notify(new ArgumentException("Bugsnag crash report testing"));
 #endif
 
             InitializeComponent();
