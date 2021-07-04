@@ -4,12 +4,10 @@
 
 using Microsoft.CodeAnalysis;
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 
@@ -42,6 +40,16 @@ namespace DotNetEditor.CodeRunner
         public ConsoleColorScheme ColorScheme { get; set; } = ConsoleColorScheme.DefaultColorScheme;
 
         private ICodeRunnerOutput _outputArea;
+        private Thread _thread;
+
+        private TextWriterWithConsoleColor.TextWriterWithConsoleColor _consoleWriter;
+        private System.IO.StringWriter _debugWriter;
+        private System.Diagnostics.TextWriterTraceListener _debugListener;
+
+        // Results returned by the thread. Do not read them the thread is alive.
+        private object _result = null;
+        private Exception _exStore = null;
+        private bool _hasError = false;
 
         // Default text colors
         readonly Color defaultTextBgColor = Brushes.Black.Color;
@@ -157,7 +165,81 @@ namespace DotNetEditor.CodeRunner
                 diag.GetMessage());
         }
 
-        public bool Run()
+        private static void InvokeMethod(MethodInfo method,
+                                         Action<Delegate, Object> action,
+                                         out object result,
+                                         out bool hasError,
+                                         out Exception exStore)
+        {
+            result = null;
+            hasError = false;
+            exStore = null;
+
+            try
+            {
+                if (method.GetParameters().Any())
+                {
+                    result = method.Invoke(null, new object[] { new string[] { } });
+                }
+                else
+                {
+                    result = method.Invoke(null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                hasError = true;
+                exStore = ex;
+            }
+
+            if (action != null)
+            {
+                action.
+            }
+        }
+
+        delegate void OnRunCompleted();
+        OnRunCompleted runCompleted;
+
+        public void RunCompleted()
+        {
+
+        }
+
+        // This method is callable by the UI to refresh the partial result.
+        public void OutputPartialResult()
+        {
+            // Reset console and debug
+            System.Diagnostics.Debug.Flush();
+
+            // Output results
+            _outputArea.Clear();
+
+            dumpConsoleBuffer(_consoleWriter, "Console output");
+
+            var s = _debugWriter.ToString();
+            if (s != "")
+            {
+                AppendResult(_debugWriter.ToString(), "Debug/trace output");
+            }
+        }
+
+        private void OutputCompleteResult()
+        {
+            OutputPartialResult();
+
+            if (_result != null)
+            {
+                AppendResult(_result.ToString(), "Return value");
+            }
+
+            if (_hasError)
+            {
+                AppendResult(_exStore.InnerException.Message, "Runtime error", errorFgColor);
+            }
+        }
+
+        public bool _Run(System.Windows.Window window)
         {
             _outputArea.Clear();
             Compilation compilation;
@@ -195,83 +277,59 @@ namespace DotNetEditor.CodeRunner
             MethodInfo methodToInvoke = compiledAssembly.EntryPoint;
 
             // Prepare console and debug
-            TextWriterWithConsoleColor.TextWriterWithConsoleColor consoleWriter;
-
             if (ColoredOutput)
             {
-                consoleWriter = new TextWriterWithConsoleColor.StringWriterColor();
+                _consoleWriter = new TextWriterWithConsoleColor.StringWriterColor();
             }
             else
             {
-                consoleWriter = new TextWriterWithConsoleColor.StringWriterBW();
+                _consoleWriter = new TextWriterWithConsoleColor.StringWriterBW();
             }
 
-            var debugWriter = new System.IO.StringWriter();
-            var debugListener = new System.Diagnostics.TextWriterTraceListener(debugWriter);
+            _debugWriter = new System.IO.StringWriter();
+            _debugListener = new System.Diagnostics.TextWriterTraceListener(_debugWriter);
 
-            Console.SetOut(consoleWriter);
+            Console.SetOut(_consoleWriter);
             if (DumpInput)
             {
-                Console.SetIn(new DumpReader(new System.IO.StringReader(InputData), consoleWriter));
+                Console.SetIn(new DumpReader(new System.IO.StringReader(InputData), _consoleWriter));
             }
             else
             {
                 Console.SetIn(new System.IO.StringReader(InputData));
             }
 
-            System.Diagnostics.Debug.Listeners.Add(debugListener);
+            System.Diagnostics.Debug.Listeners.Add(_debugListener);
 
             // Run code
-            object result = null;
-            bool hasError = false;
-            Exception exStore = null;
-            try
+            _thread = new Thread(
+                () => InvokeMethod(methodToInvoke, window.Dispatcher.beginInvoke, out _result,
+                                   out _hasError, out _exStore));
+            _thread.Start();
+            return true;
+        }
+
+        public bool RunSync()
+        {
+            if (!Run())
             {
-                if (methodToInvoke.GetParameters().Any())
-                {
-                    result = methodToInvoke.Invoke(null, new object[] { new string[] { } });
-                }
-                else
-                {
-                    result = methodToInvoke.Invoke(null, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                hasError = true;
-                exStore = ex;
-            }
-            finally
-            {
-                System.Diagnostics.Debug.Listeners.Remove(debugListener);
+                return false;
             }
 
-            // Reset console and debug
-            System.Diagnostics.Debug.Flush();
+            _thread.Join();
+            _thread = null;
+
+            System.Diagnostics.Debug.Listeners.Remove(_debugListener);
+
+            OutputCompleteResult();
             Console.ResetColor();
 
-            // Output results
-            _outputArea.Clear();
+            // Clear states (need to move to final program)
+            _consoleWriter = null;
+            _debugListener = null;
+            _debugWriter = null;
 
-            dumpConsoleBuffer(consoleWriter, "Console output");
-
-            var s = debugWriter.ToString();
-            if (s != "")
-            {
-                AppendResult(debugWriter.ToString(), "Debug/trace output");
-            }
-
-            if (result != null)
-            {
-                AppendResult(result.ToString(), "Return value");
-            }
-
-            if (hasError)
-            {
-                AppendResult(exStore.InnerException.Message, "Runtime error", errorFgColor);
-            }
-
-            return !hasError;
+            return !_hasError;
         }
     }
 }

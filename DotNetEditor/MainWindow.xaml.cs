@@ -11,6 +11,7 @@ namespace DotNetEditor
     {
         private const string untitledFile = "[Untitled]";
 
+        private CodeRunner.CodeRunnerBase _codeRunner;
         private TextBuffer.TextBuffer _currentBuffer;
         private readonly FileUtils.FileHandler _fileHandler;
 
@@ -21,6 +22,7 @@ namespace DotNetEditor
 #endif
 
             InitializeComponent();
+            _codeRunner = null;
             _currentBuffer = new TextBuffer.TextBuffer(null, TextEditor.Document,
                                                        TextBuffer.FileMode.VB);
             _fileHandler = new FileUtils.FileHandler(this, TextEditor.Load, TextEditor.Save);
@@ -151,17 +153,19 @@ namespace DotNetEditor
                 {
                     buttonCodeTypeCS.IsChecked = true;
                 }
-
             }
         }
 
         private void Run_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = _codeRunner == null;
         }
 
         private void Run_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (_codeRunner != null)
+                throw new Exception("Cannot run code while some other code is running.");
+
             // Add hidden console on first run to allow colors to be set (i.e.
             // Console.ForegroundColor and Console.BackgroundColor) Doesn't work if set on
             // MyBase.Load
@@ -182,8 +186,10 @@ namespace DotNetEditor
             runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            bool success = runner.Run();
+            bool success = runner.RunSync();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
+
+            _codeRunner = null;
         }
 
         private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)
