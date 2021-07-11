@@ -160,7 +160,7 @@ namespace DotNetEditor
             e.CanExecute = _codeRunner == null;
         }
 
-        private void Run_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Run_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (_codeRunner != null)
                 throw new Exception("Cannot run code while some other code is running.");
@@ -180,7 +180,7 @@ namespace DotNetEditor
             runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            bool success = runner.Run();
+            bool success = await runner.Run();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
 
             _codeRunner = null;

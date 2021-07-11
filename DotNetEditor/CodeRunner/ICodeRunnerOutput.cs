@@ -19,7 +19,7 @@ namespace DotNetEditor.CodeRunner
         void AppendText(string text);
 
         // Remove all text and style from the output.
-        void Clear();
+        void ClearOutput();
 
         // Return if the output is empty.
         bool IsEmpty();

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 
@@ -172,7 +173,7 @@ namespace DotNetEditor.CodeRunner
             System.Diagnostics.Debug.Flush();
 
             // Output results
-            _outputArea.Clear();
+            _outputArea.ClearOutput();
 
             DumpConsoleBuffer(_consoleWriter, "Console output");
 
@@ -198,9 +199,8 @@ namespace DotNetEditor.CodeRunner
             }
         }
 
-        public bool Run()
+        public async Task<bool> Run()
         {
-            _outputArea.Clear();
             Compilation compilation;
             try
             {
@@ -217,6 +217,8 @@ namespace DotNetEditor.CodeRunner
 
             if (!emitResult.Success)
             {
+                _outputArea.ClearOutput();
+
                 AppendResult(Environment.NewLine +
                     emitResult.Diagnostics
                         .Select(diag => DiagToString(diag))
@@ -261,16 +263,25 @@ namespace DotNetEditor.CodeRunner
             System.Diagnostics.Debug.Listeners.Add(_debugListener);
 
             // Run code
-            if (methodToInvoke.GetParameters().Any())
-                _thread = new Thread(new ThreadStart(() => {
-                    methodToInvoke.Invoke(null, new object[] { new string[] { } });
-                }));
-            else
-                _thread = new Thread(new ThreadStart(() => {
-                    methodToInvoke.Invoke(null, null);
-                }));
-
+            _thread = new Thread(new ThreadStart(() =>
+            {
+                try
+                {
+                    if (methodToInvoke.GetParameters().Any())
+                        methodToInvoke.Invoke(null, new object[] { new string[] { } });
+                    else
+                        methodToInvoke.Invoke(null, null);
+                }
+                catch(Exception ex)
+                {
+                    _hasError = true;
+                    _exStore = ex;
+                }
+            }));
+            _thread.IsBackground = true;
             _thread.Start();
+
+            while (_thread.ThreadState != ThreadState.Stopped) { await Task.Delay(5); }
 
             _thread.Join();
             _thread = null;
@@ -281,11 +292,16 @@ namespace DotNetEditor.CodeRunner
             Console.ResetColor();
 
             // Clear states (need to move to final program)
-            _consoleWriter = null;
-            _debugListener = null;
-            _debugWriter = null;
+            _consoleWriter.Dispose();
+            _debugListener.Dispose();
+            _debugWriter.Dispose();
 
             return !_hasError;
+        }
+
+        public void Terminate()
+        {
+            _thread.Abort();
         }
     }
 }
