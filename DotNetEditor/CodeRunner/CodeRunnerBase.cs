@@ -195,7 +195,10 @@ namespace DotNetEditor.CodeRunner
 
             if (_hasError)
             {
-                AppendResult(_exStore.InnerException.Message, "Runtime error", errorFgColor);
+                if (_exStore is ThreadAbortException)
+                    AppendResult("", "Execution aborted", errorFgColor);
+                else
+                    AppendResult(_exStore.InnerException.Message, "Runtime error", errorFgColor);
             }
         }
 
@@ -281,7 +284,11 @@ namespace DotNetEditor.CodeRunner
             _thread.IsBackground = true;
             _thread.Start();
 
-            while (_thread.ThreadState != ThreadState.Stopped) { await Task.Delay(5); }
+            while (_thread.ThreadState != ThreadState.Stopped &&
+                   _thread.ThreadState != ThreadState.Aborted)
+            {
+                await Task.Delay(5);
+            }
 
             _thread.Join();
             _thread = null;
@@ -301,7 +308,8 @@ namespace DotNetEditor.CodeRunner
 
         public void Terminate()
         {
-            _thread.Abort();
+            if (_thread != null)
+                _thread.Abort();
         }
     }
 }

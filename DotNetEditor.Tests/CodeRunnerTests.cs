@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 using DotNetEditor.CodeRunner;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DotNetEditor.Tests
@@ -14,6 +15,7 @@ namespace DotNetEditor.Tests
     {
         const string ConsoleOutputLine = Constants.ConsoleOutputLine;
         const string DebugTraceLine = Constants.DebugTraceLine;
+        const string AbortLine = Constants.AbortLine;
         const string Separator = Constants.Separator;
 
         [Fact]
@@ -136,6 +138,64 @@ namespace DotNetEditor.Tests
             Assert.Equal(
                 ConsoleOutputLine + "123\r\n" + Separator + DebugTraceLine + "456\r\n",
                 output.GetText());
+        }
+
+        [Fact]
+        public async void TerminateVBCodeAtStart()
+        {
+            const string code = "Console.WriteLine(123)";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new VBCodeRunner(code, "", output);
+            Task<bool> task = runner.Run();
+            runner.Terminate();
+
+            Assert.False(await task, output.GetText());
+            Assert.True(output.GetText().Contains(AbortLine), output.GetText());
+        }
+
+        [Fact]
+        public async void TerminateVBCodeAtMiddle()
+        {
+            const string code = "Console.WriteLine(123) : DO : LOOP";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new VBCodeRunner(code, "", output);
+            Task<bool> task = runner.Run();
+            await Task.Delay(100);
+            runner.Terminate();
+
+            Assert.False(await task, output.GetText());
+            Assert.Equal(ConsoleOutputLine + "123\r\n" + Separator + AbortLine, output.GetText());
+        }
+
+        [Fact]
+        public async void TerminateCSCodeAtStart()
+        {
+            const string code = "Console.WriteLine(123);";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new CSCodeRunner(code, "", output);
+            Task<bool> task = runner.Run();
+            runner.Terminate();
+
+            Assert.False(await task, output.GetText());
+            Assert.True(output.GetText().Contains(AbortLine), output.GetText());
+        }
+
+        [Fact]
+        public async void TerminateCSCodeAtMiddle()
+        {
+            const string code = "Console.WriteLine(123); while (true) ;";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new CSCodeRunner(code, "", output);
+            Task<bool> task = runner.Run();
+            await Task.Delay(100);
+            runner.Terminate();
+
+            Assert.False(await task, output.GetText());
+            Assert.Equal(ConsoleOutputLine + "123\r\n" + Separator + AbortLine, output.GetText());
         }
     }
 }
