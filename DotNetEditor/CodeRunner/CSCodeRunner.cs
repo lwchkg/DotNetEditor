@@ -27,9 +27,11 @@ namespace DotNetEditor.CodeRunner
 
             SyntaxTree tree = GetSyntaxTree(parseOptions);
 
-            SortedSet<string> uniqueImports = new SortedSet<string>(AssemblyImports);
-            uniqueImports.Add("mscorlib.dll");
-            uniqueImports.Add("Microsoft.CSharp.dll");
+            SortedSet<string> uniqueImports = new SortedSet<string>(AssemblyImports)
+            {
+                "mscorlib.dll",
+                "Microsoft.CSharp.dll"
+            };
 
             List<MetadataReference> references = new List<MetadataReference>();
             try
@@ -58,10 +60,10 @@ namespace DotNetEditor.CodeRunner
             {
                 // the program put inside a class
                 "{1} class Program {{ {0} }}",
+                // the program put inside Main function
+                "{1} class Program {{ static void Main(string[] args) {{ {0} }} }}",
                 // the raw program
                 "{0}",
-                // the program put inside Main function
-                "{1} class Program {{ static void Main(string[] args) {{ {0} }} }}"
             };
 
             SyntaxTree tree = null;
