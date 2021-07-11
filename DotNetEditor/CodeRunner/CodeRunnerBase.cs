@@ -106,7 +106,7 @@ namespace DotNetEditor.CodeRunner
                              null, null);
         }
 
-        void dumpConsoleBuffer(TextWriterWithConsoleColor.TextWriterWithConsoleColor buffer,
+        void DumpConsoleBuffer(TextWriterWithConsoleColor.TextWriterWithConsoleColor buffer,
                                string title, Color? titleFgColor = null, Color? titleBgColor = null)
         {
             if (!_outputArea.IsEmpty())
@@ -165,47 +165,6 @@ namespace DotNetEditor.CodeRunner
                 diag.GetMessage());
         }
 
-        private static void InvokeMethod(MethodInfo method,
-                                         Action<Delegate, Object> action,
-                                         out object result,
-                                         out bool hasError,
-                                         out Exception exStore)
-        {
-            result = null;
-            hasError = false;
-            exStore = null;
-
-            try
-            {
-                if (method.GetParameters().Any())
-                {
-                    result = method.Invoke(null, new object[] { new string[] { } });
-                }
-                else
-                {
-                    result = method.Invoke(null, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                hasError = true;
-                exStore = ex;
-            }
-
-            if (action != null)
-            {
-                action.
-            }
-        }
-
-        delegate void OnRunCompleted();
-        OnRunCompleted runCompleted;
-
-        public void RunCompleted()
-        {
-
-        }
-
         // This method is callable by the UI to refresh the partial result.
         public void OutputPartialResult()
         {
@@ -215,7 +174,7 @@ namespace DotNetEditor.CodeRunner
             // Output results
             _outputArea.Clear();
 
-            dumpConsoleBuffer(_consoleWriter, "Console output");
+            DumpConsoleBuffer(_consoleWriter, "Console output");
 
             var s = _debugWriter.ToString();
             if (s != "")
@@ -239,7 +198,7 @@ namespace DotNetEditor.CodeRunner
             }
         }
 
-        public bool _Run(System.Windows.Window window)
+        public bool Run()
         {
             _outputArea.Clear();
             Compilation compilation;
@@ -302,19 +261,16 @@ namespace DotNetEditor.CodeRunner
             System.Diagnostics.Debug.Listeners.Add(_debugListener);
 
             // Run code
-            _thread = new Thread(
-                () => InvokeMethod(methodToInvoke, window.Dispatcher.beginInvoke, out _result,
-                                   out _hasError, out _exStore));
-            _thread.Start();
-            return true;
-        }
+            if (methodToInvoke.GetParameters().Any())
+                _thread = new Thread(new ThreadStart(() => {
+                    methodToInvoke.Invoke(null, new object[] { new string[] { } });
+                }));
+            else
+                _thread = new Thread(new ThreadStart(() => {
+                    methodToInvoke.Invoke(null, null);
+                }));
 
-        public bool RunSync()
-        {
-            if (!Run())
-            {
-                return false;
-            }
+            _thread.Start();
 
             _thread.Join();
             _thread = null;

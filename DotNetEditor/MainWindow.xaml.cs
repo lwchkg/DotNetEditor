@@ -20,7 +20,6 @@ namespace DotNetEditor
 #if DEBUG
             App.client.Notify(new ArgumentException("Bugsnag crash report testing"));
 #endif
-
             InitializeComponent();
             _codeRunner = null;
             _currentBuffer = new TextBuffer.TextBuffer(null, TextEditor.Document,
@@ -166,11 +165,6 @@ namespace DotNetEditor
             if (_codeRunner != null)
                 throw new Exception("Cannot run code while some other code is running.");
 
-            // Add hidden console on first run to allow colors to be set (i.e.
-            // Console.ForegroundColor and Console.BackgroundColor) Doesn't work if set on
-            // MyBase.Load
-            ConsoleUtil.CreateHiddenConsoleWindowIfNotExists();
-
             CodeRunner.CodeRunnerBase runner;
             if (_currentBuffer.Language == TextBuffer.FileMode.VB)
             {
@@ -186,7 +180,7 @@ namespace DotNetEditor
             runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            bool success = runner.RunSync();
+            bool success = runner.Run();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
 
             _codeRunner = null;

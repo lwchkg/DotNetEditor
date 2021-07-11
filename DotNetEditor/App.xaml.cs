@@ -18,6 +18,10 @@ namespace DotNetEditor
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            // Colored output only works if this is an console app. We do not want the console
+            // anyway, so hide it.
+            ConsoleUtil.HideConsoleWindow();
+
             if (client == null)
                 client = new Bugsnag.Client(Bugsnag.ConfigurationSection.Configuration.Settings);
         }

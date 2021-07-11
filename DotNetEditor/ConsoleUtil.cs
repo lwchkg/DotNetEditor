@@ -11,30 +11,25 @@ namespace DotNetEditor
     {
         [DllImport("Kernel32.dll", EntryPoint = "AllocConsole", ExactSpelling = false,
             CharSet = CharSet.Unicode, SetLastError = true)]
-        public extern static bool AllocConsole();
+        private static extern bool AllocConsole();
 
         [DllImport("Kernel32.dll", EntryPoint = "GetConsoleWindow", ExactSpelling = false,
             CharSet = CharSet.Unicode)]
-        public extern static IntPtr GetConsoleWindow();
+        private static extern IntPtr GetConsoleWindow();
 
         [DllImport("user32.dll", EntryPoint = "ShowWindow", ExactSpelling = false,
             CharSet = CharSet.Unicode)]
-        public extern static bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        public static bool HasConsoleWindow()
+        public static void HideConsoleWindow()
         {
-            IntPtr handle = ConsoleUtil.GetConsoleWindow();
-            return handle != IntPtr.Zero;
-        }
-
-        public static void CreateHiddenConsoleWindowIfNotExists()
-        {
-            if (!HasConsoleWindow())
+            IntPtr handle = GetConsoleWindow();
+            if (handle == IntPtr.Zero)
             {
                 AllocConsole();
-                IntPtr handle = GetConsoleWindow();
-                ShowWindow(handle, 0);
+                handle = GetConsoleWindow();
             }
+            ShowWindow(handle, 0);
         }
     }
 }
