@@ -19,7 +19,7 @@ namespace DotNetEditor.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,15 @@ namespace DotNetEditor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to {app} is an VB/C# text editor with the ability to run code and code snippets. It can run a complete code file, or a snippet containing only the inside of a class or the inside of Main().
+        ///
+        ///The program does not use an interactive console when Console.ReadLine is executed. Instead the text in &quot;Input Data&quot; is used as the input.
+        ///
+        ///See https://github.com/lwchkg/DotNetEditor for source code and license.
+        ///
+        ///Credits:
+        ///ICSharpCode, for AvalonEdit control (MIT license).
+        ///Icons8 (https://icons8.com), for free icons (CC BY-N [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string aboutbox {
             get {
@@ -84,7 +92,13 @@ namespace DotNetEditor.Properties {
         ///  Next
         ///  Console.WriteLine()
         ///Next
-        ///.
+        ///
+        ///Console.ResetColor()
+        ///
+        ///Console.WriteLine()
+        ///Console.Write(&quot;Enter some text: &quot;)
+        ///Dim s As String = Console.ReadLine()
+        ///Console.WriteLine(s).
         /// </summary>
         internal static string samplecode {
             get {
