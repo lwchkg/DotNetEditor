@@ -41,7 +41,7 @@ namespace DotNetEditor.Tests
         }
 
         [SkippableFact]
-        public void TextWriterWithConsoleColor()
+        public async void TextWriterWithConsoleColor()
         {
             SkipTestIfNoConsoleColor();
 
@@ -58,7 +58,7 @@ Console.Write(78);
 
             TestCodeRunnerOutput output = new TestCodeRunnerOutput();
             CodeRunnerBase runner = new CSCodeRunner(code, "", output);
-            Assert.True(runner.Run(), output.GetText());
+            Assert.True(await runner.Run(), output.GetText());
             Assert.Equal(ConsoleOutputLine + "12345678", output.GetText());
 
             Color red = ConsoleColorScheme.DefaultColorScheme.Colors[12];

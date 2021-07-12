@@ -171,7 +171,11 @@ namespace DotNetEditor
 
         // void AppendText(string text);  (already implemented by AvalonEdit.TextEditor)
 
-        // void Clear();  (already implemented by AvalonEdit.TextEditor)
+        public void ClearOutput()
+        {
+            Clear();
+            formatInfo.Clear();
+        }
 
         public bool IsEmpty()
         {

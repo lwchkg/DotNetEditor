@@ -69,7 +69,7 @@ namespace DotNetEditor.TextWriterWithConsoleColor
             callback(_buffer.ToString(
                          colorData.Last().Start,
                          _buffer.Length - colorData.Last().Start),
-                          colorData.Last().Color);
+                         colorData.Last().Color);
         }
 
         public override string ToString()

@@ -11,6 +11,7 @@ namespace DotNetEditor
     {
         private const string untitledFile = "[Untitled]";
 
+        private CodeRunner.CodeRunnerBase _codeRunner;
         private TextBuffer.TextBuffer _currentBuffer;
         private readonly FileUtils.FileHandler _fileHandler;
 
@@ -19,8 +20,8 @@ namespace DotNetEditor
 #if DEBUG
             App.client.Notify(new ArgumentException("Bugsnag crash report testing"));
 #endif
-
             InitializeComponent();
+            _codeRunner = null;
             _currentBuffer = new TextBuffer.TextBuffer(null, TextEditor.Document,
                                                        TextBuffer.FileMode.VB);
             _fileHandler = new FileUtils.FileHandler(this, TextEditor.Load, TextEditor.Save);
@@ -151,21 +152,18 @@ namespace DotNetEditor
                 {
                     buttonCodeTypeCS.IsChecked = true;
                 }
-
             }
         }
 
         private void Run_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = _codeRunner == null;
         }
 
-        private void Run_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Run_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Add hidden console on first run to allow colors to be set (i.e.
-            // Console.ForegroundColor and Console.BackgroundColor) Doesn't work if set on
-            // MyBase.Load
-            ConsoleUtil.CreateHiddenConsoleWindowIfNotExists();
+            if (_codeRunner != null)
+                throw new Exception("Cannot run code while some other code is running.");
 
             CodeRunner.CodeRunnerBase runner;
             if (_currentBuffer.Language == TextBuffer.FileMode.VB)
@@ -182,8 +180,10 @@ namespace DotNetEditor
             runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            bool success = runner.Run();
+            bool success = await runner.Run();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
+
+            _codeRunner = null;
         }
 
         private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)

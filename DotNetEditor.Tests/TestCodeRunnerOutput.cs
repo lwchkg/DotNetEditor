@@ -70,7 +70,7 @@ namespace DotNetEditor.Tests
             return;
         }
 
-        public void Clear()
+        public void ClearOutput()
         {
             _text.Clear();
             _format.Clear();
