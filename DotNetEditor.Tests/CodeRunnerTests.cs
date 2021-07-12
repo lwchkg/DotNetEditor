@@ -15,6 +15,7 @@ namespace DotNetEditor.Tests
     {
         const string ConsoleOutputLine = Constants.ConsoleOutputLine;
         const string DebugTraceLine = Constants.DebugTraceLine;
+        const string ReturnValueLine = Constants.ReturnValueLine;
         const string AbortLine = Constants.AbortLine;
         const string Separator = Constants.Separator;
 
@@ -138,6 +139,30 @@ namespace DotNetEditor.Tests
             Assert.Equal(
                 ConsoleOutputLine + "123\r\n" + Separator + DebugTraceLine + "456\r\n",
                 output.GetText());
+        }
+
+        [Fact]
+        public async void ReturnCodeVB()
+        {
+            const string code = "Function Main() As Integer \n Return 2 \nEnd Function";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new VBCodeRunner(code, "", output);
+
+            Assert.True(await runner.Run(), output.GetText());
+            Assert.Equal(ConsoleOutputLine + Separator + ReturnValueLine + "2\n", output.GetText());
+        }
+
+        [Fact]
+        public async void ReturnCodeCS()
+        {
+            const string code = "static int Main() { return 2; }";
+
+            TestCodeRunnerOutput output = new TestCodeRunnerOutput();
+            CodeRunnerBase runner = new CSCodeRunner(code, "", output);
+
+            Assert.True(await runner.Run(), output.GetText());
+            Assert.Equal(ConsoleOutputLine + Separator + ReturnValueLine + "2\n", output.GetText());
         }
 
         [Fact]

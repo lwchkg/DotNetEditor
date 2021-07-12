@@ -10,6 +10,7 @@ namespace DotNetEditor.Tests
     {
         public const string ConsoleOutputLine = " --- Console output --- \n";
         public const string DebugTraceLine = " --- Debug/trace output --- \n";
+        public const string ReturnValueLine = " --- Return value --- \n";
         public const string AbortLine = " --- Execution aborted --- \n";
         public const string Separator = "\n\n";
     }

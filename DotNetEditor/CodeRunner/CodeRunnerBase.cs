@@ -45,9 +45,8 @@ namespace DotNetEditor.CodeRunner
 
         private TextWriterWithConsoleColor.TextWriterWithConsoleColor _consoleWriter;
         private System.IO.StringWriter _debugWriter;
-        private System.Diagnostics.TextWriterTraceListener _debugListener;
 
-        // Results returned by the thread. Do not read them the thread is alive.
+        // Results returned by the thread. Do not read them while the thread is alive.
         private object _result = null;
         private Exception _exStore = null;
         private bool _hasError = false;
@@ -180,7 +179,7 @@ namespace DotNetEditor.CodeRunner
             var s = _debugWriter.ToString();
             if (s != "")
             {
-                AppendResult(_debugWriter.ToString(), "Debug/trace output");
+                AppendResult(s, "Debug/trace output");
             }
         }
 
@@ -190,7 +189,7 @@ namespace DotNetEditor.CodeRunner
 
             if (_result != null)
             {
-                AppendResult(_result.ToString(), "Return value");
+                AppendResult(_result.ToString() + "\n", "Return value");
             }
 
             if (_hasError)
@@ -251,7 +250,7 @@ namespace DotNetEditor.CodeRunner
             }
 
             _debugWriter = new System.IO.StringWriter();
-            _debugListener = new System.Diagnostics.TextWriterTraceListener(_debugWriter);
+            var debugListener = new System.Diagnostics.TextWriterTraceListener(_debugWriter);
 
             Console.SetOut(_consoleWriter);
             if (DumpInput)
@@ -263,7 +262,7 @@ namespace DotNetEditor.CodeRunner
                 Console.SetIn(new System.IO.StringReader(InputData));
             }
 
-            System.Diagnostics.Debug.Listeners.Add(_debugListener);
+            System.Diagnostics.Debug.Listeners.Add(debugListener);
 
             // Run code
             _thread = new Thread(new ThreadStart(() =>
@@ -271,9 +270,9 @@ namespace DotNetEditor.CodeRunner
                 try
                 {
                     if (methodToInvoke.GetParameters().Any())
-                        methodToInvoke.Invoke(null, new object[] { new string[] { } });
+                        _result = methodToInvoke.Invoke(null, new object[] { new string[] { } });
                     else
-                        methodToInvoke.Invoke(null, null);
+                        _result = methodToInvoke.Invoke(null, null);
                 }
                 catch(Exception ex)
                 {
@@ -293,14 +292,13 @@ namespace DotNetEditor.CodeRunner
             _thread.Join();
             _thread = null;
 
-            System.Diagnostics.Debug.Listeners.Remove(_debugListener);
+            System.Diagnostics.Debug.Listeners.Remove(debugListener);
 
             OutputCompleteResult();
             Console.ResetColor();
 
-            // Clear states (need to move to final program)
             _consoleWriter.Dispose();
-            _debugListener.Dispose();
+            debugListener.Dispose();
             _debugWriter.Dispose();
 
             return !_hasError;
