@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DotNetEditor"
+        xmlns:gs="clr-namespace:GrayscaleEffect"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:converter="clr-namespace:DotNetEditor.Converters"
         mc:Ignorable="d"
         UseLayoutRounding="True">
     <Window.Resources>
         <ResourceDictionary>
+            <gs:GrayscaleEffect x:Key="grayscaleEffect" />
+
             <converter:CommandConverter x:Key="Command" />
 
             <Style x:Key="Title"
@@ -51,6 +54,10 @@
                         Command="local:AppCommands.Run"
                         CanExecute="Run_CanExecute"
                         Executed="Run_Executed" />
+        <CommandBinding x:Name="Stop"
+                        Command="local:AppCommands.Stop"
+                        CanExecute="Stop_CanExecute"
+                        Executed="Stop_Executed" />
         <CommandBinding x:Name="About"
                         Command="local:AppCommands.About"
                         CanExecute="About_CanExecute"
@@ -70,9 +77,25 @@
                 <Style TargetType="Image">
                     <Setter Property="Height"
                             Value="30" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" Value="False">
+                            <Setter Property="Effect" Value="{StaticResource grayscaleEffect}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="Viewbox">
+                    <Setter Property="Height"
+                            Value="30" />
+                    <Setter Property="Width"
+                            Value="30" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" Value="False">
+                            <Setter Property="Effect" Value="{StaticResource grayscaleEffect}" />
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
                 <Style TargetType="RadioButton"
-                       BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" />
+                    BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" />
             </ToolBar.Resources>
             <Button Command="Open"
                     ToolTip="{Binding Command, Converter={StaticResource Command}, RelativeSource={RelativeSource Self}}">
@@ -89,7 +112,11 @@
             <Separator />
             <Button Command="local:AppCommands.Run"
                     ToolTip="{Binding Command, Converter={StaticResource Command}, RelativeSource={RelativeSource Self}}">
-                <Image Source="Images/play-30.png" />
+                <Viewbox Child="{StaticResource PlayIcon}"/>
+            </Button>
+            <Button Command="local:AppCommands.Stop"
+                    ToolTip="{Binding Command, Converter={StaticResource Command}, RelativeSource={RelativeSource Self}}">
+                <Viewbox Child="{StaticResource StopIcon}"/>
             </Button>
             <Separator />
             <StackPanel Orientation="Horizontal">

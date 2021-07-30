@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Canvas x:Key="PlayIcon" x:Shared="False" Width="30" Height="30">
+        <Path Fill="#66ee66" Stroke="#00aa00" StrokeThickness="1"  Data="M9.5,8.5V21.5L21.5,15Z" />
+    </Canvas>
+
+    <Canvas x:Key="StopIcon" x:Shared="False" Width="30" Height="30">
+        <Path Fill="#ff7777" Stroke="#ff0000" StrokeThickness="1"  Data="M9.5,9.5H20.5V20.5H9.5Z" />
+    </Canvas>
+</ResourceDictionary>

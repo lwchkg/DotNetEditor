@@ -17,6 +17,10 @@ namespace DotNetEditor
             "Run", "Run", typeof(MainWindow),
             new InputGestureCollection{new KeyGesture(Key.F5)});
 
+        public static readonly RoutedUICommand Stop = new RoutedUICommand(
+            "Stop", "Stop", typeof(MainWindow),
+            new InputGestureCollection { new KeyGesture(Key.F5, ModifierKeys.Shift) });
+
         public static readonly RoutedUICommand About = new RoutedUICommand(
             "About", "About", typeof(MainWindow));
     }

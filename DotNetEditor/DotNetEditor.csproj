@@ -100,6 +100,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -126,6 +130,8 @@
     <Compile Include="AppCommands.cs" />
     <Compile Include="DumpReader.cs" />
     <Compile Include="FileUtils\FileHandler.cs" />
+    <Resource Include="GrayscaleEffect\GrayscaleEffect.fx.ps" />
+    <Compile Include="GrayscaleEffect\GrayscaleEffect.cs" />
     <Compile Include="TextBuffer\TextBuffer.cs" />
     <Compile Include="TextWriterWithConsoleColor\ColorInfo.cs" />
     <Compile Include="TextWriterWithConsoleColor\IWithConsoleColor.cs" />
@@ -173,9 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\save-30.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\play-30.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="TextData\samplecode.txt" />
@@ -233,6 +236,9 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GrayscaleEffect\GrayscaleEffect.hlsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

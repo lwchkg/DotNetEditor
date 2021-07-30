@@ -84,7 +84,7 @@ namespace DotNetEditor
             return "All Supported Files|*.vb; *.cs|VB Program|*.vb|C# Program|*.cs|All Files|*.*";
         }
 
-#region Commands
+        #region Commands
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = TextEditor == null ||
@@ -165,25 +165,42 @@ namespace DotNetEditor
             if (_codeRunner != null)
                 throw new Exception("Cannot run code while some other code is running.");
 
-            CodeRunner.CodeRunnerBase runner;
             if (_currentBuffer.Language == TextBuffer.FileMode.VB)
             {
-                runner = new CodeRunner.VBCodeRunner(TextEditor.Text, InputData.Text, OutputArea);
+                _codeRunner = new CodeRunner.VBCodeRunner(TextEditor.Text, InputData.Text,
+                                                          OutputArea);
             }
             else
             {
-                runner = new CodeRunner.CSCodeRunner(TextEditor.Text, InputData.Text, OutputArea);
+                _codeRunner = new CodeRunner.CSCodeRunner(TextEditor.Text, InputData.Text,
+                                                          OutputArea);
             }
+            CommandManager.InvalidateRequerySuggested();
+            Cursor = Cursors.Wait;
+            ForceCursor = true;
 
-            runner.NSImports = NSImports.Text.Split(new string[] { "\r\n", "\n" },
+            _codeRunner.NSImports = NSImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
-            runner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
+            _codeRunner.AssemblyImports = AssemblyImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            bool success = await runner.Run();
+            bool success = await _codeRunner.Run();
             OutputArea.WordWrap = !success || buttonWordWrap.IsChecked == true;
 
             _codeRunner = null;
+            CommandManager.InvalidateRequerySuggested();
+            Cursor = Cursors.Arrow;
+            ForceCursor = false;
+        }
+
+        private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _codeRunner != null;
+        }
+
+        private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            _codeRunner.Terminate();
         }
 
         private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)
