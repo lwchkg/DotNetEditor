@@ -176,6 +176,8 @@ namespace DotNetEditor
                                                           OutputArea);
             }
             CommandManager.InvalidateRequerySuggested();
+            Cursor = Cursors.Wait;
+            ForceCursor = true;
 
             _codeRunner.NSImports = NSImports.Text.Split(new string[] { "\r\n", "\n" },
                 StringSplitOptions.RemoveEmptyEntries);
@@ -187,6 +189,8 @@ namespace DotNetEditor
 
             _codeRunner = null;
             CommandManager.InvalidateRequerySuggested();
+            Cursor = Cursors.Arrow;
+            ForceCursor = false;
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
