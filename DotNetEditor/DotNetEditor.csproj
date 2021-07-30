@@ -181,9 +181,6 @@
     <Resource Include="Images\save-30.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\play-30.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="TextData\samplecode.txt" />
   </ItemGroup>
   <ItemGroup>
